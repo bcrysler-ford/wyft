@@ -1,6 +1,8 @@
 # Setup
 Run the following command:
+```
 git clone -b StartPoint git@github.com:bcrysler-ford/wyft.git
+```
 
 # Problem Statement
 Wyft is a startup company that wishes to create a ride sharing application. 
