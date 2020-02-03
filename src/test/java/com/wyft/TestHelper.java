@@ -1,3 +1,5 @@
+package com.wyft;
+
 public class TestHelper {
 
 	public static void assertEquals(String expected, String actual){

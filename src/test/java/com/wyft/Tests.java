@@ -1,3 +1,5 @@
+package com.wyft;
+
 import com.wyft.controllers.RideController;
 import com.wyft.models.Driver;
 import com.wyft.models.Ride;
