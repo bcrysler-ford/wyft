@@ -1,3 +1,7 @@
+# Setup
+Run the following command:
+git clone -b StartPoint git@github.com:bcrysler-ford/wyft.git
+
 # Problem Statement
 Wyft is a startup company that wishes to create a ride sharing application. 
 You have been tasked with creating the first draft of the backend system for the app. The requirements are as follows:
