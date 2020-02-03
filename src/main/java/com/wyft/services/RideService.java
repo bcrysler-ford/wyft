@@ -1,0 +1,69 @@
+package com.wyft.services;
+
+import com.wyft.models.Driver;
+import com.wyft.models.Ride;
+import com.wyft.repositories.RideRepository;
+
+public class RideService {
+
+	private RideRepository rideRepository;
+
+	public RideService (RideRepository rideRepository){
+		this.rideRepository = rideRepository;
+	}
+
+	public void createRide(Ride rideToCreate){
+		rideRepository.addRide(rideToCreate);
+	}
+
+	public int acceptRide(Driver driver, Integer acceptedRideID){
+		Ride acceptedRide = rideRepository.getRideInfo(acceptedRideID);
+
+		if (acceptedRide.getStatus().equals("Accepted")){
+			return -2;
+		}
+
+		int proximity = Math.abs(acceptedRide.getPointA() - driver.getLocation());
+		if (proximity < 10){
+			rideRepository.setRideToAccepted(acceptedRideID);
+			return proximity;
+		} else if (proximity > 10){
+			return -1;
+		}
+		return -999;
+	}
+
+	public boolean startRide(int rideID, int driverLocation){
+		Ride rideToStart = rideRepository.getRideInfo(rideID);
+		if(rideToStart.getStatus().equals("Accepted") && driverLocation == rideToStart.getPointA()){
+			rideRepository.startRide(rideID);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean endRide(int rideID, int driverLocation){
+		Ride rideToEnd = rideRepository.getRideInfo(rideID);
+
+		if (driverLocation == rideToEnd.getPointB()){
+			rideRepository.endRide(rideID);
+			return true;
+		}
+		return false;
+	}
+
+	public int cancelRide(int rideID, int driverLocation) {
+		Ride rideToCancel = rideRepository.getRideInfo(rideID);
+
+		if (driverLocation == rideToCancel.getPointA()) {
+			return -1;
+		}
+
+		if (rideToCancel.getStatus().equals("In Progress")) {
+			return -2;
+		}
+
+		rideRepository.cancelRide(rideID);
+		return 1;
+	}
+}
