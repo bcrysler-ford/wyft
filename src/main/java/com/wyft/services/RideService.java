@@ -17,6 +17,7 @@ public class RideService {
 	}
 
 	public int acceptRide(Driver driver, Integer acceptedRideID){
+	    //check the logic for whether or not a ride can be accepted, then invoke a repository method to accept it
 		Ride acceptedRide = rideRepository.getRideInfo(acceptedRideID);
 
 		if (acceptedRide.getStatus().equals("Accepted")){
@@ -34,6 +35,7 @@ public class RideService {
 	}
 
 	public boolean startRide(int rideID, int driverLocation){
+	    //check the logic for whether or not a ride can be started, then invoke a repository method to start it
 		Ride rideToStart = rideRepository.getRideInfo(rideID);
 		if(rideToStart.getStatus().equals("Accepted") && driverLocation == rideToStart.getPointA()){
 			rideRepository.startRide(rideID);
@@ -43,6 +45,7 @@ public class RideService {
 	}
 
 	public boolean endRide(int rideID, int driverLocation){
+	    //check the logic for whether or not a ride can be started, then invoke a repository method to start it
 		Ride rideToEnd = rideRepository.getRideInfo(rideID);
 
 		if (driverLocation == rideToEnd.getPointB()){
@@ -53,6 +56,7 @@ public class RideService {
 	}
 
 	public int cancelRide(int rideID, int driverLocation) {
+	    //check the logic for whether or not a ride can be cancelled, then invoke a repository method to cancel it
 		Ride rideToCancel = rideRepository.getRideInfo(rideID);
 
 		if (driverLocation == rideToCancel.getPointA()) {
