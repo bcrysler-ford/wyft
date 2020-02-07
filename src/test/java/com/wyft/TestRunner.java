@@ -5,11 +5,12 @@ import java.lang.reflect.Method;
 
 public class TestRunner {
 
+    //RUN THIS METHOD IN YOUR IDE TO EXECUTE TESTS
     public static void main(String[] args) throws Exception{
-
     	System.out.println("Starting Tests....");
     	System.out.println("|-----------------------------------------------------------------------------------------------|");
 
+    	//UNCOMMENT THIS AND COMMENT LINES 16 thru 23 TO RUN A SINGLE TEST
     	//runSingleTest("cancelRideShouldReturnAlreadyInProgress_whenRideHasAlreadyStarted");
 
         Method[] testMethods = Tests.class.getMethods();

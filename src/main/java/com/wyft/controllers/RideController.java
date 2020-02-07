@@ -13,11 +13,13 @@ public class RideController {
 	}
 
 	public String hailRide(Ride request){
+		//invoke a service method which will try to create the ride, then return the result
 		rideService.createRide(request);
 		return "Ride has been hailed";
 	}
 
 	public String acceptRide(RideRequest request){
+		//invoke a service method which will try to mark a ride as accepted, then return the result
 		int proximity = rideService.acceptRide(request.getDriver(), request.getRideID());
 		if (proximity == -2){
 			return "Ride already Accepted";
@@ -29,6 +31,7 @@ public class RideController {
 	}
 
 	public String startRide(RideRequest request){
+		//invoke a service method which will try to mark a ride as started, then return the result
 		boolean startRideAllowed = rideService.startRide(request.getRideID(), request.getDriver().getLocation());
 
 		if (startRideAllowed){
@@ -40,6 +43,7 @@ public class RideController {
 	}
 
 	public String endRide(RideRequest request){
+		//invoke a service method which will try to mark a ride as ended, then return the result
 		boolean endRideAllowed = rideService.endRide(request.getRideID(), request.getDriver().getLocation());
 		if (endRideAllowed){
 			return "Ride ended";
@@ -48,6 +52,7 @@ public class RideController {
 	}
 
 	public String cancelRide(RideRequest request){
+		//invoke a service method which will try to mark a ride as ended, then return the result
 		int cancellationAllowed = rideService.cancelRide(request.getRideID(), request.getDriver().getLocation());
 		if (cancellationAllowed == -1){
 			return "Driver has arrived, cannot cancel";
