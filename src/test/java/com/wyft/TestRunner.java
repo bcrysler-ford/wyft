@@ -7,7 +7,7 @@ public class TestRunner {
 
     public static void main(String[] args) throws Exception{
 
-    	System.out.println("Starting com.wyft.Tests....");
+    	System.out.println("Starting Tests....");
     	System.out.println("|-----------------------------------------------------------------------------------------------|");
 
     	//runSingleTest("cancelRideShouldReturnAlreadyInProgress_whenRideHasAlreadyStarted");

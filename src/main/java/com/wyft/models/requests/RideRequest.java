@@ -2,7 +2,7 @@ package com.wyft.models.requests;
 
 import com.wyft.models.Driver;
 
-public class UpdateRideRequest {
+public class RideRequest {
 	private Driver driver;
 	private Integer rideID;
 
@@ -14,7 +14,7 @@ public class UpdateRideRequest {
 		return driver;
 	}
 
-	public UpdateRideRequest(Driver driver, Integer rideID) {
+	public RideRequest(Driver driver, Integer rideID) {
 		this.driver = driver;
 		this.rideID = rideID;
 	}

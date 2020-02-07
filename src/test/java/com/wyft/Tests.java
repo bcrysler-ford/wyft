@@ -3,7 +3,7 @@ package com.wyft;
 import com.wyft.controllers.RideController;
 import com.wyft.models.Driver;
 import com.wyft.models.Ride;
-import com.wyft.models.requests.UpdateRideRequest;
+import com.wyft.models.requests.RideRequest;
 import com.wyft.repositories.RideRepository;
 import com.wyft.services.RideService;
 
@@ -36,11 +36,11 @@ public class Tests {
 	public void acceptRideShouldReturnDirectionsToPointA_ifDriverIsWithinRange(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
 
-		TestHelper.assertEquals("Proceed to point A", rideController.acceptRide(currentAcceptUpdateRideRequest));
+		TestHelper.assertEquals("Proceed to point A", rideController.acceptRide(rideRequest));
 	}
 
 	// Only 1 driver can accept a ride request.
@@ -48,52 +48,49 @@ public class Tests {
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
 		Driver currentDriver2 = new Driver(11);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
-		UpdateRideRequest currentAcceptUpdateRideRequest2 = new UpdateRideRequest(currentDriver2, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
+		RideRequest rideRequest2 = new RideRequest(currentDriver2, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 
-		TestHelper.assertEquals("Ride already Accepted", rideController.acceptRide(currentAcceptUpdateRideRequest2));
+		TestHelper.assertEquals("Ride already Accepted", rideController.acceptRide(rideRequest2));
 	}
 
 	// A driver must be within 10 miles of the requested ride starting location to accept the ride
 	public void acceptRideShouldReturnOutOfRange_whenDriverIsOutOfRange(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(20);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
 
-		TestHelper.assertEquals("Not in Range", rideController.acceptRide(currentAcceptUpdateRideRequest));
+		TestHelper.assertEquals("Not in Range", rideController.acceptRide(rideRequest));
 	}
 
 	// The customer must be able to confirm/start the ride once the driver has accepted and arrives at point A
 	public void startRideShouldReturnStarted_whenDriverHasAcceptedAndArrived(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 		currentDriver.setLocation(currentRide.getPointA());
 
-		UpdateRideRequest currentStartUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
-
-		TestHelper.assertEquals("Started", rideController.startRide(currentStartUpdateRideRequest));
+		TestHelper.assertEquals("Started", rideController.startRide(rideRequest));
 	}
 
 	// The customer should not be able to start the ride if the driver is not in range
 	public void startRideShouldReturnDriverOutOfRange_whenDriverNotInRange(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(17);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
-		UpdateRideRequest currentStartUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		rideController.acceptRide(rideRequest);
 
-		TestHelper.assertEquals("Driver is not in range", rideController.startRide(currentStartUpdateRideRequest));
+		TestHelper.assertEquals("Driver is not in range", rideController.startRide(rideRequest));
 	}
 
 
@@ -101,84 +98,81 @@ public class Tests {
 	public void cancelRideShouldReturnCancelled_whenRideHasNotYetStarted_andDriverHasNotArrived(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 
-		UpdateRideRequest currentCancelRideRequest = new UpdateRideRequest(currentDriver, 1);
-
-		TestHelper.assertEquals("Cancelled", rideController.cancelRide(currentCancelRideRequest));
+		TestHelper.assertEquals("Cancelled", rideController.cancelRide(rideRequest));
 	}
 
 	// The user cannot cancel the ride if the driver has arrived
 	public void cancelRideShouldReturnDriverArrived_whenDriverHasArrived(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 		currentDriver.setLocation(currentRide.getPointA());
 
-		UpdateRideRequest currentCancelRideRequest = new UpdateRideRequest(currentDriver, 1);
 
-		TestHelper.assertEquals("Driver has arrived, cannot cancel", rideController.cancelRide(currentCancelRideRequest));
+		TestHelper.assertEquals("Driver has arrived, cannot cancel", rideController.cancelRide(rideRequest));
 	}
 
 	// The user cannot cancel the ride if it has already started
 	public void cancelRideShouldReturnAlreadyInProgress_whenRideHasAlreadyStarted(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(5);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 		currentDriver.setLocation(currentRide.getPointA());
-		UpdateRideRequest currentStartUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
-		rideController.startRide(currentStartUpdateRideRequest);
+		rideRequest = new RideRequest(currentDriver, 1);
+		rideController.startRide(rideRequest);
 
 		currentDriver.setLocation(52);
-		UpdateRideRequest currentCancelRideRequest = new UpdateRideRequest(currentDriver, 1);
+		rideRequest = new RideRequest(currentDriver, 1);
 
-		TestHelper.assertEquals("Ride already in progress, cannot cancel", rideController.cancelRide(currentCancelRideRequest));
+		TestHelper.assertEquals("Ride already in progress, cannot cancel", rideController.cancelRide(rideRequest));
 	}
 
 	// The driver can end the ride when they have arrived at point B
 	public void endRideShouldReturnSuccess_whenDriverIsAtPointB(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 		currentDriver.setLocation(currentRide.getPointA());
 
-		UpdateRideRequest currentStartUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
-		rideController.startRide(currentStartUpdateRideRequest);
+		rideRequest = new RideRequest(currentDriver, 1);
+		rideController.startRide(rideRequest);
 
 		currentDriver.setLocation(70);
-		UpdateRideRequest currentEndUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		rideRequest = new RideRequest(currentDriver, 1);
 
-		TestHelper.assertEquals("Ride ended", rideController.endRide(currentEndUpdateRideRequest));
+		TestHelper.assertEquals("Ride ended", rideController.endRide(rideRequest));
 	}
 
 	// The driver cannot end the ride when they have not yet arrived
 	public void endRideShouldReturnFailure_whenDriverHasNotArrivedAtPointB(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
-		UpdateRideRequest currentAcceptUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		RideRequest rideRequest = new RideRequest(currentDriver, 1);
 
 		rideController.hailRide(currentRide);
-		rideController.acceptRide(currentAcceptUpdateRideRequest);
+		rideController.acceptRide(rideRequest);
 		currentDriver.setLocation(currentRide.getPointA());
 
-		UpdateRideRequest currentStartUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
-		rideController.startRide(currentStartUpdateRideRequest);
+		rideRequest = new RideRequest(currentDriver, 1);
+		rideController.startRide(rideRequest);
 
 		currentDriver.setLocation(52);
-		UpdateRideRequest currentEndUpdateRideRequest = new UpdateRideRequest(currentDriver, 1);
+		rideRequest = new RideRequest(currentDriver, 1);
 
-		TestHelper.assertEquals("Cannot end ride, destination must be reached", rideController.endRide(currentEndUpdateRideRequest));
+		TestHelper.assertEquals("Cannot end ride, destination must be reached", rideController.endRide(rideRequest));
 	}
 }

@@ -1,7 +1,7 @@
 package com.wyft.controllers;
 
 import com.wyft.models.Ride;
-import com.wyft.models.requests.UpdateRideRequest;
+import com.wyft.models.requests.RideRequest;
 import com.wyft.services.RideService;
 
 public class RideController {
@@ -17,7 +17,7 @@ public class RideController {
 		return "Ride has been hailed";
 	}
 
-	public String acceptRide(UpdateRideRequest request){
+	public String acceptRide(RideRequest request){
 		int proximity = rideService.acceptRide(request.getDriver(), request.getRideID());
 		if (proximity == -2){
 			return "Ride already Accepted";
@@ -28,7 +28,7 @@ public class RideController {
 		}
 	}
 
-	public String startRide(UpdateRideRequest request){
+	public String startRide(RideRequest request){
 		boolean startRideAllowed = rideService.startRide(request.getRideID(), request.getDriver().getLocation());
 
 		if (startRideAllowed){
@@ -39,7 +39,7 @@ public class RideController {
 
 	}
 
-	public String endRide(UpdateRideRequest request){
+	public String endRide(RideRequest request){
 		boolean endRideAllowed = rideService.endRide(request.getRideID(), request.getDriver().getLocation());
 		if (endRideAllowed){
 			return "Ride ended";
@@ -47,7 +47,7 @@ public class RideController {
 		return "Cannot end ride, destination must be reached";
 	}
 
-	public String cancelRide(UpdateRideRequest request){
+	public String cancelRide(RideRequest request){
 		int cancellationAllowed = rideService.cancelRide(request.getRideID(), request.getDriver().getLocation());
 		if (cancellationAllowed == -1){
 			return "Driver has arrived, cannot cancel";
