@@ -20,10 +20,10 @@ public class RideController {
 
 	public String acceptRide(RideRequest request){
 		//invoke a service method which will try to mark a ride as accepted, then return the result
-		int proximity = rideService.acceptRide(request.getDriver(), request.getRideID());
-		if (proximity == -2){
+		int status = rideService.acceptRide(request.getDriver(), request.getRideID());
+		if (status == -2){
 			return "Ride already Accepted";
-		} else if (proximity == -1){
+		} else if (status == -1){
 			return "Not in Range";
 		} else {
 			return "Proceed to point A";
