@@ -68,7 +68,7 @@ public class Tests {
 		TestHelper.assertEquals("Not in Range", rideController.acceptRide(rideRequest));
 	}
 
-	// The customer must be able to confirm/start the ride once the driver has accepted and arrives at point A
+	// The user must be able to confirm/start the ride once the driver has accepted and arrives at point A
 	public void startRideShouldReturnStarted_whenDriverHasAcceptedAndArrived(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(10);
@@ -81,7 +81,7 @@ public class Tests {
 		TestHelper.assertEquals("Started", rideController.startRide(rideRequest));
 	}
 
-	// The customer should not be able to start the ride if the driver is not in range
+	// The user should not be able to start the ride if the driver is not in range
 	public void startRideShouldReturnDriverOutOfRange_whenDriverNotInRange(){
 		Ride currentRide = new Ride(1,3,70);
 		Driver currentDriver = new Driver(17);
