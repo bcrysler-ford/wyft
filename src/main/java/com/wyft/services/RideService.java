@@ -27,7 +27,7 @@ public class RideService {
 		int proximity = Math.abs(acceptedRide.getPointA() - driver.getLocation());
 		if (proximity < 10){
 			rideRepository.setRideToAccepted(acceptedRideID);
-			return proximity;
+			return 1;
 		} else if (proximity > 10){
 			return -1;
 		}
